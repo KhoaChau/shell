@@ -1,0 +1,4 @@
+#source this file in your shell rc file to make use of all the alias below
+
+#reload makes it easier to source your rc file after you make changes.
+alias reload="source ~/.zshrc"
