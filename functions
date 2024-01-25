@@ -1,0 +1,115 @@
+#!/bin/bash
+
+##ssh portion change the location of your pem file, and the user name if it's not ec2-user.
+sshec2(){
+ echo "ssh -i ~/.ssh/YOUPEMFILE.pem ec2-user@$1"
+ ssh -i ~/.ssh/YOURPEMFILE.pem ec2-user@"$1"
+}
+
+sshcloud_deplog(){
+ssh -i ~/.ssh/YOURPEMFILE.pem ec2-userr@"$1" "tail -f /opt/codedeploy-agent/deployment-root/deployment-logs/codedeploy-agent-deployments.log"
+}
+
+sshcloud_initlog(){
+ssh -i ~/.ssh/YOURPEMFILE.pem ec2-userr@"$1" "tail -f /var/log/cloud-init-output.log"
+}
+
+sshdash() {
+  FIXEDIP=`echo $1 | sed 's/-/./g'`
+  ssh "$FIXEDIP"
+}
+
+function iamgroup() {
+aws iam get-group --group-name $1 | jq -r .Users[].UserName
+}
+
+function ecrlogin() {
+  eval $(aws ecr get-login --no-include-email --region us-east-1 --profile $1)
+}
+
+aws_profile_list (){
+	grep "^\[" ~/.aws/credentials | sed -e 's/\[\(.*\)\]/\1/'
+}
+
+aws_profile_select (){
+  IFS=$'\n' profile=($(grep '^\[' ~/.aws/credentials | sed -e 's/\[\(.*\)\]/\1/'))
+  for ((i=1; i <= ${#profile[@]}; i++)){
+    echo $i" " $profile[$i]; 
+  } 
+  echo -n "Select the Profile #: "
+  read selection
+  eval export AWS_PROFILE=$profile[$selection]
+}
+
+aws_profile_add (){
+  echo ""
+  echo "Enter Profile Name (NO SPACES): "
+  read profile
+  echo "[$profile]" >> ~/.aws/credentials
+  
+  echo "enter access key: "
+  read key
+  echo "aws_access_key_id        = $key" >> ~/.aws/credentials
+  
+  echo "enter secret key: "
+  read secret 
+  echo "aws_secret_access_key    = $secret" >> ~/.aws/credentials
+  echo "" >> ~/.aws/credentials
+  
+  aws_profile_list
+}
+
+aws_profile_file_add (){
+  name=`tail -1 $1 | cut -d"," -f1`
+  key=`tail -1 $1 | cut -d"," -f3`
+  secret=`tail -1 $1 | cut -d"," -f4`
+  echo -e $name "\n"$key "\n"$secret
+  echo "[$name]" >> $HOME/.aws/credentials
+  echo "aws_access_key_id        = $key" >> $HOME/.aws/credentials
+  echo "aws_secret_access_key    = $secret" >> $HOME/.aws/credentials
+  echo "" >> $HOME/.aws/credentials
+}
+
+aws_assume (){
+  if [ -z "$1" ] || [ -z "$2" ]; 
+  then 
+  echo -e "\nError::"
+  echo "1st argument should be the Role ARN, and 2nd the Session Name"
+  echo "eg: aws_assume --role-arn arn:aws:iam::930908212222:role/Databricks-External Test-Session"
+  else
+  aws sts assume-role --role-arn $1 --role-session-name $2 > session.txt
+  id=`cat session.txt | grep AccessKeyId | cut -d "\"" -f4`
+  key=`cat session.txt | grep SecretAccessKey | cut -d "\"" -f4`
+  token=`cat session.txt | grep SessionToken | cut -d "\"" -f4`
+
+  export AWS_ACCESS_KEY_ID=$id
+  export AWS_SECRET_ACCESS_KEY=$key
+  export AWS_SESSION_TOKEN=$token
+  
+  echo $AWS_ACCESS_KEY_ID
+  echo $AWS_SECRET_ACCESS_KEY
+  echo $AWS_SESSION_TOKEN
+  fi
+}
+
+aws_unassume (){
+  unset AWS_ACCESS_KEY_ID AWS_SECRETACCESS_KEY AWS_SESSION_TOKEN AWS_SECURITY_TOKEN SAML2AWS_PROFILE
+}
+
+kube_file(){
+  export KUBECONFIG=$HOME/.kube/$1
+  echo $KUBECONFIG
+}
+
+aws_lb_ip(){
+  aws elb describe-load-balancers --region $2 > /tmp/lb.txt
+  grep DNSName lb.txt| cut -d "\"" -f4 | while read line; do nslookup $line; done | grep $1
+  rm /tmp/lb.txt
+}
+
+tfcd() {
+cd $1
+export AWS_PROFILE=CHANGE_ME
+terraform workspace select $1
+}
+
