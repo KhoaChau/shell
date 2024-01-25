@@ -6,11 +6,11 @@ sshec2(){
  ssh -i ~/.ssh/YOURPEMFILE.pem ec2-user@"$1"
 }
 
-sshcloud_deplog(){
+sshcloud_deplog() {
 ssh -i ~/.ssh/YOURPEMFILE.pem ec2-userr@"$1" "tail -f /opt/codedeploy-agent/deployment-root/deployment-logs/codedeploy-agent-deployments.log"
 }
 
-sshcloud_initlog(){
+sshcloud_initlog() {
 ssh -i ~/.ssh/YOURPEMFILE.pem ec2-userr@"$1" "tail -f /var/log/cloud-init-output.log"
 }
 
@@ -27,11 +27,11 @@ ecrlogin() {
   eval $(aws ecr get-login --no-include-email --region us-east-1 --profile $1)
 }
 
-aws_profile_list (){
+aws_profile_list() {
 	grep "^\[" ~/.aws/credentials | sed -e 's/\[\(.*\)\]/\1/'
 }
 
-aws_profile_select (){
+aws_profile_select() {
   IFS=$'\n' profile=($(grep '^\[' ~/.aws/credentials | sed -e 's/\[\(.*\)\]/\1/'))
   for ((i=1; i <= ${#profile[@]}; i++)){
     echo $i" " $profile[$i]; 
@@ -41,7 +41,7 @@ aws_profile_select (){
   eval export AWS_PROFILE=$profile[$selection]
 }
 
-aws_profile_add (){
+aws_profile_add() {
   echo ""
   echo "Enter Profile Name (NO SPACES): "
   read profile
@@ -59,7 +59,7 @@ aws_profile_add (){
   aws_profile_list
 }
 
-aws_profile_file_add (){
+aws_profile_file_add() {
   name=`tail -1 $1 | cut -d"," -f1`
   key=`tail -1 $1 | cut -d"," -f3`
   secret=`tail -1 $1 | cut -d"," -f4`
@@ -70,7 +70,7 @@ aws_profile_file_add (){
   echo "" >> $HOME/.aws/credentials
 }
 
-aws_assume (){
+aws_assume() {
   if [ -z "$1" ] || [ -z "$2" ]; 
   then 
   echo -e "\nError::"
@@ -92,16 +92,16 @@ aws_assume (){
   fi
 }
 
-aws_unassume (){
+aws_unassume() {
   unset AWS_ACCESS_KEY_ID AWS_SECRETACCESS_KEY AWS_SESSION_TOKEN AWS_SECURITY_TOKEN SAML2AWS_PROFILE
 }
 
-kube_file(){
+kube_file() {
   export KUBECONFIG=$HOME/.kube/$1
   echo $KUBECONFIG
 }
 
-aws_lb_ip(){
+aws_lb_ip() {
   aws elb describe-load-balancers --region $2 > /tmp/lb.txt
   grep DNSName lb.txt| cut -d "\"" -f4 | while read line; do nslookup $line; done | grep $1
   rm /tmp/lb.txt
