@@ -1,0 +1,42 @@
+"https://dougblack.io/words/a-good-vimrc.html
+" colorscheme desert
+syntax enable             " enable syntax processing
+set background=dark
+set tabstop=2             " number of visual spaces per TAB
+set softtabstop=2         " number of spaces in tab when editing
+set expandtab             " tabs are spaces
+set cursorline            " highlight current line
+set wrap                  " Automatically wrap text that extends beyond the screen length.
+set wildmenu              " visual autocomplete for command menu
+set showmatch             " highlight matching [{()}]
+set incsearch             " search as characters are entered
+set ignorecase            "
+set smartcase             "
+set ttyfast               " Speed up scrolling in Vim
+set hlsearch              " highlight matches
+set matchpairs+=<:>       " Highlight matching pairs of brackets. Use the '%' character to jump between them.
+set list                  " Display different types of white spaces.
+set listchars=tab:›\ ,trail:•,extends:#,nbsp:.
+set encoding=utf-8        " Encoding
+
+filetype on               " Helps force plug-ins to load correctly when it is turned back on below.
+filetype plugin indent on " For plug-ins to load correctly.
+
+let mapleader="'"       " leader is single quote
+" turn off search highlight with spacebar
+nnoremap <leader><space> :nohlsearch<cr> 
+
+nnoremap <leader>n :set number<cr>
+nnoremap <leader>nn :set nonumber<cr>
+
+" Vim's auto indentation feature does not work properly with text copied from outside of Vim. Press the <F2> key to toggle paste mode on/off.
+nnoremap <F2> :set invpaste paste?<CR>
+imap <F2> <C-O>:set invpaste paste?<CR>
+set pastetoggle=<F2>
+
+set laststatus=2              " Status bar
+" Set status line display
+set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%l,%v][%p%%]\ [BUFFER=%n]\ %{strftime('%c')}
+
+" Store info from no more than 100 files at a time, 9999 lines of text, 100kb of data. Useful for copying large amounts of data between files.
+set viminfo='100,<9999,s100
