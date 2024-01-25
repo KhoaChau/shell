@@ -1,0 +1,25 @@
+##based on the Guide from:
+##https://www.digitalocean.com/community/tutorials/how-to-configure-custom-connection-options-for-your-ssh-client
+##change everything in quotes
+Host "name"
+##HostName can also be set as %h.domainname.com 
+  HostName "name.domain.com"
+  ForwardAgent "yes/no"
+  ForwardX11 "yes/no"
+  User "username"
+  Port "number"
+  StrictHostKeyChecking "ask/yes/no"
+  ServerAliveInterval "seconds"
+  UserKnownHostsFile "best to use absolute path here or /dev/null" 
+  LogLevel "QUIET/INFO/ERROR/FATAL/VERBOSE/DEBUG1/DEBUG2/DEBUG3"
+  IdentityFile "absolute path to rsa or pem key"
+
+## This will allow us to use port 8080 on the local machine
+## in order to access example.com at port 80 from the remote machine
+ Host local_to_remote
+    LocalForward 8080 example.com:80
+
+## This will allow us to offer access to internal.com at port 443
+## to the remote machine through port 7777 on the other side
+ Host remote_to_local
+    RemoteForward 7777 internal.com:443
