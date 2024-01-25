@@ -13,6 +13,5 @@ create a script that will ask user to punch in all the sensitive info and move f
 * echo "source $new_location_alias" >> ~/.shellinterpretor.rc
   echo "source $new_location_function >> ~/.shellinterpretor.rc
 
-## Future:
-
-create a encrypted file that will fill in all the variables. This will be the one stop emergency shop to get up and running with the bare minimum.
+Future:
+  create a encrypted file that will fill in all the variables. This will be the one stop emergency stop to get up and running with the bare minimum.
