@@ -1,6 +1,6 @@
 #!/bin/bash
 
-##ssh portion change the location of your pem file, and the user name if it's not ec2-user.
+##ssh portion. Change the location of your pem file, and the user name if it's not ec2-user.
 sshec2(){
  echo "ssh -i ~/.ssh/YOUPEMFILE.pem ec2-user@$1"
  ssh -i ~/.ssh/YOURPEMFILE.pem ec2-user@"$1"
@@ -19,11 +19,11 @@ sshdash() {
   ssh "$FIXEDIP"
 }
 
-function iamgroup() {
+iamgroup() {
 aws iam get-group --group-name $1 | jq -r .Users[].UserName
 }
 
-function ecrlogin() {
+ecrlogin() {
   eval $(aws ecr get-login --no-include-email --region us-east-1 --profile $1)
 }
 
