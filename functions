@@ -75,7 +75,7 @@ aws_assume() {
   then 
   echo -e "\nError::"
   echo "1st argument should be the Role ARN, and 2nd the Session Name"
-  echo "eg: aws_assume --role-arn arn:aws:iam::930908212222:role/Databricks-External Test-Session"
+  echo "eg: aws_assume --role-arn arn:aws:iam::900000000000:role/Databricks-Ext Test-Session"
   else
   aws sts assume-role --role-arn $1 --role-session-name $2 > session.txt
   id=`cat session.txt | grep AccessKeyId | cut -d "\"" -f4`
