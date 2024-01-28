@@ -4,6 +4,7 @@
 Host "name"
 ##HostName can also be set as %h.domainname.com 
   HostName "name.domain.com"
+  HostKeyAlgorithms=+ssh-rsa
   ForwardAgent "yes/no"
   ForwardX11 "yes/no"
   User "username"
