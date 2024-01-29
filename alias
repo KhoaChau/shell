@@ -2,14 +2,15 @@
 
 #reload makes it easier to source your rc file after you make changes.
 alias reload="source ~/.zshrc"
-alias history='history -i'
+alias history="history -i"
 alias ydl="youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best'"
 alias vi=vim
-alias update='sudo apt update; sudo apt upgrade -y; sudo apt autoremove'
+alias update="sudo apt update; sudo apt upgrade -y; sudo apt autoremove"
 alias install="sudo apt install -y $1"
+alias ls="ls -l"
 
 alias k8=kubectl
-alias kconflist='ls -l ~/.kube/'
+alias kconflist="ls -l ~/.kube/"
 
 alias awsproflist="grep -F '[' ~/.aws/credentials"
 alias aws_unset="unset AWS_ACCESS_KEY_ID;unset AWS_SECRET_ACCESS_KEY;unset AWS_SESSION_TOKEN;"
