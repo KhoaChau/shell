@@ -8,12 +8,19 @@ alias vi=vim
 alias update="sudo apt update; sudo apt upgrade -y; sudo apt autoremove"
 alias install="sudo apt install -y $1"
 alias ls="ls -l"
+alias wol="wakeonlan $1"
+alias visshconfig="vi ~/.ssh/config"
+alias vialias="vi ~/Github/shell/alias"
 
 alias k8=kubectl
 alias kconflist="ls -l ~/.kube/"
 
 alias awsproflist="grep -F '[' ~/.aws/credentials"
 alias aws_unset="unset AWS_ACCESS_KEY_ID;unset AWS_SECRET_ACCESS_KEY;unset AWS_SESSION_TOKEN;"
+alias aws_id="aws sts get-caller-identity"
 
-alias tf=terraform
+alias tg=terragrunt
+alias tf=terragrunt
 
+
+alias kinzoo_ssh="ssh -i ~/.ssh/id_rsa_kinzoo" 
